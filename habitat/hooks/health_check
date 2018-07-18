@@ -1,0 +1,16 @@
+#!/bin/sh
+
+rc=0
+
+hab pkg exec core/curl curl --silent --head --fail --max-time 20 http://localhost:80
+
+case $? in
+  0)
+    rc=0
+    ;;
+  *)
+    rc=2
+    ;;
+esac
+
+exit $rc
