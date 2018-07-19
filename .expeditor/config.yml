@@ -1,0 +1,40 @@
+slack:
+  notify_channel: ops
+
+github:
+  delete_branch_on_merge: true
+
+pipelines:
+  - verify:
+      description: Pull Request validation tests
+  - deploy/acceptance:
+      description: Deploy changes to kubernetes
+      definition: .expeditor/deploy.pipeline.yml
+      env:
+        - ENVIRONMENT: acceptance
+        - APP: nginx-demo
+  - deploy/production:
+      description: Deploy changes to kubernetes
+      definition: .expeditor/deploy.pipeline.yml
+      env:
+        - ENVIRONMENT: production
+        - APP: nginx-demo
+
+promote:
+  action:
+    - bash:.expeditor/promote.sh
+    - trigger_pipeline:deploy/acceptance:
+        only_if_conditions:
+          - value_one: "{{target_channel}}"
+            operator: equals
+            value_two: acceptance
+    - trigger_pipeline:deploy/production:
+        only_if_conditions:
+          - value_one: "{{target_channel}}"
+            operator: equals
+            value_two: stable
+    - bash:.expeditor/purge-cdn.sh
+  channels:
+    - unstable
+    - acceptance
+    - stable
