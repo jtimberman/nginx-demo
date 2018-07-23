@@ -29,7 +29,7 @@ else
 fi
 
 get_image_tag() {
-  results=$(curl --silent https://willem.habitat.sh/v1/depot/channels/jtimberman/${CHANNEL}/pkgs/nginx-demo/latest | jq '.ident')
+  results=$(curl --silent https://willem.habitat.sh/v1/depot/channels/chefops/${CHANNEL}/pkgs/nginx-demo/latest | jq '.ident')
   pkg_version=$(echo "$results" | jq -r .version)
   pkg_release=$(echo "$results" | jq -r .release)
   echo "${pkg_version}-${pkg_release}"
