@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: nginx-demo-<%= ENV['ENVIRONMENT'] %>
+  name: nginx-demo
 ---
 apiVersion: habitat.sh/v1beta1
 kind: Habitat
