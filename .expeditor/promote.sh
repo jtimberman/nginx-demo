@@ -14,7 +14,7 @@ target_channel="${TARGET_CHANNEL:?You must provide a TARGET_CHANNEL}"
 #
 # parse error: Invalid string: control characters from U+0000 through U+001F must be escaped at line 15, column 12
 #
-results=$(curl --silent https://willem.habitat.sh/v1/depot/channels/jtimberman/$source_channel/pkgs/nginx-demo/latest | jq '.ident')
+results=$(curl --silent https://willem.habitat.sh/v1/depot/channels/chefops/$source_channel/pkgs/nginx-demo/latest | jq '.ident')
 
 pkg_origin=$(echo "$results" | jq -r .origin)
 pkg_name=$(echo "$results" | jq -r .name)
