@@ -2,7 +2,7 @@ steps:
   - command: .expeditor/buildkite/kubernetes.sh
     label: "Kubernetes"
     concurrency: 1
-    concurrency_group: chef-chef-web-util-master/deploy/$ENVIRONMENT
+    concurrency_group: chef-nginx-demo-master/deploy/$ENVIRONMENT
     plugins:
       docker#v1.1.1:
         always-pull: true
