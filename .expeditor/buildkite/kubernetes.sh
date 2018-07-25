@@ -18,7 +18,7 @@ DEBUG=${DEBUG:-false}
 # This block translates the "environment" into the appropriate Habitat
 # channel from which we'll deploy from
 if [ "$ENVIRONMENT" == "acceptance" ]; then
-  export CHANNEL=acceptance
+  export CHANNEL=dev
 elif [ "$ENVIRONMENT" == "production" ]; then
   export CHANNEL=stable
 elif [ "$ENVIRONMENT" == "dev" ]; then
