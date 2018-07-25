@@ -43,6 +43,5 @@ promote:
             operator: equals
             value_two: stable
   channels:
-    - unstable
     - acceptance
     - stable
