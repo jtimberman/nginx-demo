@@ -4,6 +4,15 @@ slack:
 github:
   delete_branch_on_merge: true
 
+habitat_packages:
+  - nginx-demo:
+      origin: chefops
+      export:
+        - docker
+
+merge_actions:
+  - built_in:trigger_habitat_package_build
+
 pipelines:
   - verify:
       description: Pull Request validation tests
@@ -20,14 +29,14 @@ pipelines:
         - ENVIRONMENT: production
         - APP: nginx-demo
 
+subscriptions:
+  - workload: docker_image_published:chefops/nginx-demo:*
+    actions:
+      - trigger_pipeline:deploy/acceptance
+
 promote:
   action:
     - bash:.expeditor/promote.sh
-    - trigger_pipeline:deploy/acceptance:
-        only_if_conditions:
-          - value_one: "{{target_channel}}"
-            operator: equals
-            value_two: acceptance
     - trigger_pipeline:deploy/production:
         only_if_conditions:
           - value_one: "{{target_channel}}"
