@@ -30,7 +30,7 @@ pipelines:
         - APP: nginx-demo
 
 subscriptions:
-  - workload: docker_image_published:chefops/nginx-demo:latest
+  - workload: docker_image_published:chefops/nginx-demo:acceptance
     actions:
       - trigger_pipeline:deploy/acceptance
 
