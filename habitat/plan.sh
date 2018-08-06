@@ -1,6 +1,6 @@
 pkg_name=nginx-demo
 pkg_origin=chefops
-pkg_version="0.2.1"
+pkg_version="0.2.2"
 pkg_maintainer="Chef Operations <ops@chef.io>"
 pkg_deps=(core/nginx core/curl)
 pkg_svc_user="root"
