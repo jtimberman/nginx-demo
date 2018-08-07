@@ -18,7 +18,7 @@ DEBUG=${DEBUG:-false}
 # This block translates the "environment" into the appropriate Habitat
 # channel from which we'll deploy from
 if [ "$ENVIRONMENT" == "acceptance" ]; then
-  export CHANNEL=dev
+  export CHANNEL=acceptance
 elif [ "$ENVIRONMENT" == "production" ]; then
   export CHANNEL=stable
 elif [ "$ENVIRONMENT" == "dev" ]; then
@@ -38,18 +38,6 @@ get_image_tag() {
 get_elb_hostname() {
   kubectl get services ${APP}-${ENVIRONMENT} --namespace=${APP} -o json 2>/dev/null | \
     jq '.status.loadBalancer.ingress[].hostname' -r
-}
-
-get_namespace() {
-    kubectl get namespace $APP -o json 2>/dev/null | \
-    jq '.metadata.name'
-}
-
-create_namespace() {
-  target_name=$(get_namespace || echo)
-  if [[ ! -n $target_name ]]; then
-    kubectl create namespace $APP
-  fi
 }
 
 wait_for_elb() {
@@ -76,9 +64,6 @@ if [[ $DEBUG == "true" ]]; then
   echo "Channel: ${CHANNEL}"
   echo "Environment: ${ENVIRONMENT}"
 fi
-
-echo "--- Checking for and creating ${APP} namespace in Kubernetes"
-create_namespace
 
 echo "--- Applying kubernetes configuration for ${ENVIRONMENT} to cluster"
 IMAGE_TAG=$(get_image_tag) erb -T- kubernetes/deployment.yml | kubectl apply -f -
