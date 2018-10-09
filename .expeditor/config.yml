@@ -1,0 +1,47 @@
+slack:
+  notify_channel: ops
+
+github:
+  delete_branch_on_merge: true
+
+habitat_packages:
+  - nginx-demo:
+      origin: chefops
+      export:
+        - docker
+
+merge_actions:
+  - built_in:trigger_habitat_package_build
+
+pipelines:
+  - verify:
+      description: Pull Request validation tests
+  - deploy/acceptance:
+      description: Deploy changes to kubernetes
+      definition: .expeditor/deploy.pipeline.yml
+      env:
+        - ENVIRONMENT: acceptance
+        - APP: nginx-demo
+  - deploy/production:
+      description: Deploy changes to kubernetes
+      definition: .expeditor/deploy.pipeline.yml
+      env:
+        - ENVIRONMENT: production
+        - APP: nginx-demo
+
+subscriptions:
+  - workload: docker_image_published:chefops/nginx-demo:acceptance
+    actions:
+      - trigger_pipeline:deploy/acceptance
+
+promote:
+  action:
+    - bash:.expeditor/promote.sh
+    - trigger_pipeline:deploy/production:
+        only_if_conditions:
+          - value_one: "{{target_channel}}"
+            operator: equals
+            value_two: stable
+  channels:
+    - acceptance
+    - stable

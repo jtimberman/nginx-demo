@@ -1,0 +1,8 @@
+steps:
+  - label: static
+    command: |
+      shellcheck --shell=bash --exclude=SC1090,SC1091,SC2034,SC2039,SC2148,SC2153,SC2154,SC2140 ./habitat/plan.sh
+      [[ -f ./kubernetes/deployment.yml ]] && erb -T- ./kubernetes/deployment.yml | ruby -ryaml -e "YAML.parse(STDIN.read)"
+    plugins:
+      docker#v1.1.1:
+        image: "chefes/buildkite"

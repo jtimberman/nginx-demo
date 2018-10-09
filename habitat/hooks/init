@@ -3,4 +3,8 @@
 exec 2>&1
 
 mkdir -p {{pkg.svc_var_path}}/nginx
+mkdir -p {{pkg.svc_data_path}}
+
 chown hab:hab {{pkg.svc_var_path}}
+
+echo "It works" >> {{pkg.svc_data_path}}/index.html
